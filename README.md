@@ -1,6 +1,6 @@
 
 ## 準備
-1. ホストに入れる
+1. ホストに入れる(これは厳密には真偽不明)
     ```
     sudo apt install libvulkan1 vulkan-tools
     ```
