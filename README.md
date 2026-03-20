@@ -17,3 +17,7 @@
     ```
     python3 simpler_rt1.py
     ```
+    headlessの場合は以下コマンドで実行できる．
+    ```
+    xvfb-run python3 simpler_rt1.py 
+    ```

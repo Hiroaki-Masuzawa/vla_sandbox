@@ -33,9 +33,13 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
 # RUN apt-get update && sudo apt-get install google-cloud-cli
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-cli -y
 
-RUN apt-get update && apt-get install -y unzip 
+RUN apt-get update && apt-get install -y unzip  && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN gsutil -m cp -r gs://gdm-robotics-open-x-embodiment/open_x_embodiment_and_rt_x_oss/rt_1_x_tf_trained_for_002272480_step.zip . && \
     unzip rt_1_x_tf_trained_for_002272480_step.zip && \
     mv rt_1_x_tf_trained_for_002272480_step checkpoints && \
     rm rt_1_x_tf_trained_for_002272480_step.zip
+
+RUN apt-get update && apt-get install -y xvfb  && \
+rm -rf /var/lib/apt/lists/*
