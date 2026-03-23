@@ -47,6 +47,7 @@ def main():
     )
     parser.add_argument("--video-name", type=str, default="result.mp4")
     parser.add_argument("--instruction", type=str, default="")
+    parser.add_argument("--model-name", type=str, default="rt_1_x", choices=['rt_1_x', "octo-base", "octo-small" ])
     args = parser.parse_args()
 
     task_name = args.task_name
@@ -74,11 +75,12 @@ def main():
     else:
         policy_setup = "widowx_bridge"
 
-    model_name = "rt_1_x"  # @param ["rt_1_x", "rt_1_400k", "rt_1_58k", "rt_1_1k", "octo-base", "octo-small"]
+    # model_name = "rt_1_x"  # @param ["rt_1_x", "rt_1_400k", "rt_1_58k", "rt_1_1k", "octo-base", "octo-small"]
+    model_name = args.model_name
     if "rt_1" in model_name:
         from simpler_env.policies.rt1.rt1_model import RT1Inference
 
-        ckpt_path = "/SimplerEnv/checkpoints"
+        ckpt_path = f"/SimplerEnv/{model_name}_checkpoints"
         model = RT1Inference(saved_model_path=ckpt_path, policy_setup=policy_setup)
     elif "octo" in model_name:
         from simpler_env.policies.octo.octo_model import OctoInference
