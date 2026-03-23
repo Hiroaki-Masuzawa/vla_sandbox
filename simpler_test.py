@@ -47,7 +47,7 @@ def main():
     )
     parser.add_argument("--video-name", type=str, default="result.mp4")
     parser.add_argument("--instruction", type=str, default="")
-    parser.add_argument("--model-name", type=str, default="rt_1_x", choices=['rt_1_x', "octo-base", "octo-small" ])
+    parser.add_argument("--model-name", type=str, default="rt_1_x", choices=['rt_1_x', "octo-base", "octo-small", "openvla-7b" ])
     args = parser.parse_args()
 
     task_name = args.task_name
@@ -88,6 +88,11 @@ def main():
         model = OctoInference(
             model_type=model_name, policy_setup=policy_setup, init_rng=0
         )
+    elif "openvla" in model_name:
+        from simpler_env.policies.openvla.openvla_model import OpenVLAInference
+        model = OpenVLAInference(
+            saved_model_path="openvla/openvla-7b", policy_setup=policy_setup
+        )
     else:
         raise ValueError(model_name)
 
@@ -104,14 +109,17 @@ def main():
     timestep = 0
     while not (predicted_terminated or truncated):
         # step the model; "raw_action" is raw model action output; "action" is the processed action to be sent into maniskill env
-        raw_action, action = model.step(image)
+        if "openvla" in model_name:
+            raw_action, action = model.step(image, instruction)
+        else :
+            raw_action, action = model.step(image)
         predicted_terminated = bool(action["terminate_episode"][0] > 0)
         obs, reward, success, truncated, info = env.step(
             np.concatenate(
                 [action["world_vector"], action["rot_axangle"], action["gripper"]]
             )
         )
-        print(timestep, info)
+        print(timestep, info, predicted_terminated, truncated)
         # update image observation
         image = get_image_from_maniskill2_obs_dict(env, obs)
         images.append(image)

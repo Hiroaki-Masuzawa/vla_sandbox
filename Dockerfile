@@ -52,3 +52,19 @@ RUN gsutil -m cp -r gs://gdm-robotics-open-x-embodiment/open_x_embodiment_and_rt
 RUN pip install --upgrade "jax[cuda12_pip]==0.4.20" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html 
 RUN bash -c "git clone https://github.com/octo-models/octo/ ; cd octo; git checkout 653c54acde686fde619855f2eac0dd6edad7116b  ;pip install -e ."
 RUN pip install transformers==4.34.1
+
+
+# add openvla
+RUN git remote add openvla https://github.com/DelinQu/SimplerEnv-OpenVLA.git
+RUN git fetch --all
+# RUN git config user.email "hoge@hoge.com" && git config user.name "hoge"
+# RUN  git marge openvla/main
+RUN git checkout openvla/main
+RUN pip install -e .
+RUN pip install torch==2.3.1 torchvision==0.18.1 timm==0.9.10 tokenizers==0.15.2 accelerate==0.32.1
+RUN pip install flash-attn==2.6.1 --no-build-isolation
+RUN pip install transformers==4.35.2 "huggingface_hub>=0.23.0,<1.0" 
+WORKDIR /
+RUN git clone --recursive https://github.com/openvla/openvla.git
+WORKDIR /openvla
+RUN pip install -r requirements-min.txt 
