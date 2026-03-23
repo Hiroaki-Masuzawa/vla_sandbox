@@ -25,6 +25,7 @@ def write_video(frames, output_file="test.mp4", fps=10):
 
 task_names = [
     "google_robot_pick_coke_can",
+    "google_robot_pick_object", 
     "google_robot_move_near",
     "google_robot_open_drawer",
     "google_robot_close_drawer",
