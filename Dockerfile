@@ -8,6 +8,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
 
+# For solved error.
+# https://stackoverflow.com/questions/73144451/modulenotfounderror-no-module-named-setuptools-command-build
 RUN pip install --upgrade pip "setuptools<82" wheel && \
     pip install numpy==1.24.4
 
@@ -40,7 +42,7 @@ RUN apt-get update && apt-get install -y xvfb unzip && \
 # download weights
 RUN gsutil -m cp -r gs://gdm-robotics-open-x-embodiment/open_x_embodiment_and_rt_x_oss/rt_1_x_tf_trained_for_002272480_step.zip . && \
     unzip rt_1_x_tf_trained_for_002272480_step.zip && \
-    mv rt_1_x_tf_trained_for_002272480_step rt_1_checkpoints && \
+    mv rt_1_x_tf_trained_for_002272480_step rt_1_x_checkpoints && \
     rm rt_1_x_tf_trained_for_002272480_step.zip
 # RUN gsutil -m cp -r gs://gdm-robotics-open-x-embodiment/open_x_embodiment_and_rt_x_oss/rt_1_tf_trained_for_000400120 rt_1_400k_checkpoints
 # RUN gsutil -m cp -r gs://gdm-robotics-open-x-embodiment/open_x_embodiment_and_rt_x_oss/rt_1_tf_trained_for_000058240 rt_1_58k_checkpoints    
