@@ -52,10 +52,10 @@ def main():
 
     task_name = args.task_name
 
-    if "env" in locals():
-        print("Closing existing env")
-        env.close()
-        del env
+    # if "env" in locals():
+    #     print("Closing existing env")
+    #     env.close()
+    #     del env
     env = simpler_env.make(task_name)
 
     # Note: we turned off the denoiser as the colab kernel will crash if it's turned on
@@ -63,12 +63,7 @@ def main():
     # and perform evaluations locally.
     sapien.render_config.rt_use_denoiser = False
 
-    obs, reset_info = env.reset()
-    instruction = (
-        env.get_language_instruction() if args.instruction == "" else args.instruction
-    )
-    print("Reset info", reset_info)
-    print("Instruction", instruction)
+    # obs, reset_info = env.reset()
 
     if "google" in task_name:
         policy_setup = "google_robot"
@@ -97,9 +92,13 @@ def main():
         raise ValueError(model_name)
 
     obs, reset_info = env.reset()
-    instruction = env.get_language_instruction()
+    # instruction = env.get_language_instruction()
+    instruction = (
+        env.get_language_instruction() if args.instruction == "" else args.instruction
+    )
     model.reset(instruction)
-    print(instruction)
+    print("Reset info", reset_info)
+    print("Instruction", instruction)
 
     image = get_image_from_maniskill2_obs_dict(
         env, obs
