@@ -48,6 +48,7 @@ def main():
     parser.add_argument("--video-name", type=str, default="result.mp4")
     parser.add_argument("--instruction", type=str, default="")
     parser.add_argument("--model-name", type=str, default="rt_1_x", choices=['rt_1_x', "octo-base", "octo-small", "openvla-7b" ])
+    parser.add_argument("--max-step", type=int, default=None)
     args = parser.parse_args()
 
     task_name = args.task_name
@@ -57,6 +58,12 @@ def main():
     #     env.close()
     #     del env
     env = simpler_env.make(task_name)
+    # from gym.wrappers import TimeLimit
+    # env = TimeLimit(env.env, max_episode_steps=200)
+    if args.max_step is not None:
+        max_step = args.max_step
+        env._max_episode_steps = max_step
+        env._saved_kwargs['max_episode_steps'] = max_step
 
     # Note: we turned off the denoiser as the colab kernel will crash if it's turned on
     # To use the denoiser, please git clone our SIMPLER environments
